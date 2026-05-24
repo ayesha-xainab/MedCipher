@@ -55,9 +55,6 @@ st.markdown("""
 
 
 # ─── API KEY: loaded from Streamlit secrets, never shown to user ───────────────
-# st.secrets reads from .streamlit/secrets.toml locally
-# and from the Secrets panel on Streamlit Cloud when deployed.
-# Users never see or need to enter the key.
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 
 
@@ -130,6 +127,8 @@ def render_term_card(item: dict, idx: int):
 
 # ─── SESSION STATE ─────────────────────────────────────────────────────────────
 if "history"     not in st.session_state: st.session_state.history     = []
+if "results"     not in st.session_state: st.session_state.results     = []
+if "last_filter" not in st.session_state: st.session_state.last_filter = "All"
 if "sample_text" not in st.session_state: st.session_state.sample_text = ""
 
 
@@ -185,6 +184,7 @@ with col_left:
 with col_right:
     st.subheader(" Explanations")
 
+    # ── Step 1: call API only when button is clicked ─────────────────────────
     if run_btn:
         if not medical_text.strip():
             st.warning("Please paste some medical text on the left.")
@@ -192,39 +192,47 @@ with col_right:
             with st.spinner(" Analyzing medical terms… (3–5 seconds)"):
                 try:
                     results = call_groq(build_prompt(medical_text))
-
                     ts = datetime.now().strftime("%H:%M")
+                    # Save results into session state so they survive re-runs
+                    st.session_state.results = results
                     st.session_state.history.append((medical_text, results, ts))
-
-                    watch_count  = sum(1 for r in results if r.get("severity_flag","").lower() == "watch")
-                    normal_count = len(results) - watch_count
-
-                    c1, c2, c3 = st.columns(3)
-                    c1.metric("Terms Found", len(results))
-                    c2.metric("⚠ Watch",     watch_count)
-                    c3.metric("✔ Normal",    normal_count)
-                    st.markdown("---")
-
-                    show = st.radio("Show:", ["All", "Watch only", "Normal only"], horizontal=True)
-                    filtered = results
-                    if show == "Watch only":
-                        filtered = [r for r in results if r.get("severity_flag","").lower() == "watch"]
-                    elif show == "Normal only":
-                        filtered = [r for r in results if r.get("severity_flag","").lower() != "watch"]
-
-                    for idx, item in enumerate(filtered, 1):
-                        render_term_card(item, idx)
-
-                    st.download_button(
-                        "⬇ Download Report (JSON)",
-                        data=json.dumps(results, indent=2),
-                        file_name=f"medical_explanation_{ts.replace(':','')}.json",
-                        mime="application/json"
-                    )
-
                 except json.JSONDecodeError:
                     st.error("Model returned unexpected format. Please try again.")
                 except Exception as e:
                     st.error(f"Error: {str(e)}")
-    else:
-        st.info(" Paste a medical report on the left and click **Explain Medical Terms**.")
+
+    # ── Step 2: display results from session state (survives filter clicks) ──
+    if st.session_state.results:
+        results = st.session_state.results
+
+        watch_count  = sum(1 for r in results if r.get("severity_flag","").lower() == "watch")
+        normal_count = len(results) - watch_count
+
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Terms Found", len(results))
+        c2.metric("⚠ Watch",     watch_count)
+        c3.metric("✔ Normal",    normal_count)
+        st.markdown("---")
+        show = st.radio("Show:", ["All", "Watch only", "Normal only"], horizontal=True)
+
+        if show == "Watch only":
+            filtered = [r for r in results if r.get("severity_flag","").lower() == "watch"]
+        elif show == "Normal only":
+            filtered = [r for r in results if r.get("severity_flag","").lower() != "watch"]
+        else:
+            filtered = results
+
+        if not filtered:
+            st.info("No terms found for this filter.")
+        else:
+            for idx, item in enumerate(filtered, 1):
+                render_term_card(item, idx)
+
+        st.download_button(
+            " Download Report (JSON)",
+            data=json.dumps(results, indent=2),
+            file_name="medical_explanation.json",
+            mime="application/json"
+        )
+    elif not run_btn:
+        st.info("👈 Paste a medical report on the left and click **Explain Medical Terms**.")
