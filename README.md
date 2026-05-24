@@ -1,12 +1,8 @@
-# ⚕️ RxPlain — Medical Report Explanation Agent
-
-> **AI Assignment 2 — UET Taxila | Software Engineering Department**
-> Course: Artificial Intelligence | Instructor: Dr. Kanwal Yousaf
-> Team: Alina Nisar (23-SE-3) & Ayesha Zainab (23-SE-19)
+# MedCipher — Medical Report Explanation Agent
 
 ---
 
-## 📌 Project Overview
+## Project Overview
 
 **RxPlain** is a task-oriented AI agent that accepts unstructured medical text — lab reports, radiology findings, discharge summaries — and returns clear, structured, patient-friendly explanations of every medical term found.
 
@@ -16,7 +12,7 @@ It is powered by **LLaMA 3.3 70B** (via the **Groq API**), built with **Streamli
 
 ---
 
-## 🎯 What the Agent Does
+## What the Agent Does
 
 | Input | Output per Term |
 |-------|----------------|
@@ -27,7 +23,7 @@ It is powered by **LLaMA 3.3 70B** (via the **Groq API**), built with **Streamli
 
 ---
 
-## 🧠 System Architecture
+## System Architecture
 
 ```
 User (Browser)
@@ -59,7 +55,7 @@ User sees structured explanation report
 
 ---
 
-## 🔧 Technologies Used
+## Technologies Used
 
 | Technology | Purpose |
 |------------|---------|
@@ -73,7 +69,7 @@ User sees structured explanation report
 
 ---
 
-## 🚀 Local Setup Instructions
+## Local Setup Instructions
 
 ### Step 1 — Clone the repository
 ```bash
@@ -97,7 +93,7 @@ Open `.streamlit/secrets.toml` and replace the placeholder:
 ```toml
 GROQ_API_KEY = "your_actual_groq_key_here"
 ```
-> ⚠️ This file is listed in `.gitignore` and will **never** be pushed to GitHub.
+> This file is listed in `.gitignore` and will **never** be pushed to GitHub.
 
 ### Step 5 — Run the app
 ```bash
@@ -107,7 +103,7 @@ Opens at `http://localhost:8501`
 
 ---
 
-## 🌐 Deployment on Streamlit Cloud (Free)
+## Deployment on Streamlit Cloud (Free)
 
 Streamlit Cloud hosts your app publicly at a shareable URL for free.
 
@@ -140,7 +136,7 @@ Your app is now live at a public URL. No localhost, no terminal — works on any
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 rxplain/
@@ -154,7 +150,7 @@ rxplain/
 
 ---
 
-## 🔐 How the API Key is Kept Secret
+## How the API Key is Kept Secret
 
 A common mistake is hardcoding the API key directly in `app.py`. If pushed to GitHub, anyone can steal it.
 
@@ -170,7 +166,7 @@ Users who visit the deployed app **never see or enter** the API key — it is lo
 
 ---
 
-## 📊 Sample Output
+## Sample Output
 
 **Input:**
 > *"CBC shows leukocytosis (WBC 14,000/μL). BMP reveals elevated creatinine (2.1 mg/dL) and hyponatremia (Na 128 mEq/L). Impression: possible pneumonia with AKI."*
@@ -188,13 +184,13 @@ Users who visit the deployed app **never see or enter** the API key — it is lo
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 RxPlain is for **educational purposes only**. It does not provide medical advice. Always consult a qualified healthcare professional for medical decisions.
 
 ---
 
-## 📚 References
+## References
 
 - Sudarshan et al. (2024). Agentic LLM Workflows for Generating Patient-Friendly Medical Reports. arXiv:2408.01112
 - Singhal et al. (2023). Large language models encode clinical knowledge. *Nature*, 620, 172–180.
