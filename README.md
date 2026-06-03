@@ -1,27 +1,23 @@
 # MedCipher — Medical Report Explanation Agent
 
----
-
 ## Project Overview
 
-**RxPlain** is a task-oriented AI agent that accepts unstructured medical text — lab reports, radiology findings, discharge summaries — and returns clear, structured, patient-friendly explanations of every medical term found.
+**MedCipher** is a task-oriented AI agent that accepts unstructured medical text — lab reports, radiology findings, discharge summaries — and returns clear, structured, patient-friendly explanations of every medical term found.
 
 It is powered by **LLaMA 3.3 70B** (via the **Groq API**), built with **Streamlit**, and deployed on **Streamlit Cloud** so any user can access it from a browser without installing anything.
 
-🔗 **Live App:** `https://YOUR-USERNAME-rxplain.streamlit.app` ← replace after deployment
+🔗 **Live App:** [https://medcipher-i-luv-my-med-assistant.streamlit.app/](https://medcipher-i-luv-my-med-assistant.streamlit.app/)
 
----
 
 ## What the Agent Does
 
 | Input | Output per Term |
 |-------|----------------|
-| Any raw medical text | ✅ Plain-language definition |
-| Lab results, radiology reports, discharge notes | ✅ Clinical relevance in context |
-| Abbreviations: CBC, MRI, DVT, BID, AKI, etc. | ✅ Suggested question to ask the doctor |
-| Drug names, diagnostic phrases | ✅ Severity flag: Normal ✔ or Watch ⚠ |
+| Any raw medical text | Plain-language definition |
+| Lab results, radiology reports, discharge notes | Clinical relevance in context |
+| Abbreviations: CBC, MRI, DVT, BID, AKI, etc. | Suggested question to ask the doctor |
+| Drug names, diagnostic phrases | Severity flag: Normal ✔ or Watch ⚠ |
 
----
 
 ## System Architecture
 
@@ -53,7 +49,6 @@ Output Formatter         (styled term cards in Streamlit)
 User sees structured explanation report
 ```
 
----
 
 ## Technologies Used
 
@@ -67,14 +62,13 @@ User sees structured explanation report
 | Streamlit Cloud | Free public deployment (no server required) |
 | JSON / re | Response parsing and cleaning |
 
----
 
 ## Local Setup Instructions
 
 ### Step 1 — Clone the repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/rxplain.git
-cd rxplain
+git clone https://github.com/Alina1905/MedCipher
+cd MedCipher
 ```
 
 ### Step 2 — Install dependencies
@@ -93,7 +87,6 @@ Open `.streamlit/secrets.toml` and replace the placeholder:
 ```toml
 GROQ_API_KEY = "your_actual_groq_key_here"
 ```
-> This file is listed in `.gitignore` and will **never** be pushed to GitHub.
 
 ### Step 5 — Run the app
 ```bash
@@ -101,9 +94,8 @@ streamlit run app.py
 ```
 Opens at `http://localhost:8501`
 
----
 
-## Deployment on Streamlit Cloud (Free)
+## Deployment on Streamlit Cloud 
 
 Streamlit Cloud hosts your app publicly at a shareable URL for free.
 
@@ -132,14 +124,11 @@ GROQ_API_KEY = "your_actual_groq_key_here"
 ```
 - Click **Save** — the app restarts automatically
 
-Your app is now live at a public URL. No localhost, no terminal — works on any device.
-
----
 
 ## Project Structure
 
 ```
-rxplain/
+MedCipher/
 ├── app.py                      ← Main Streamlit application
 ├── requirements.txt            ← Python dependencies
 ├── .gitignore                  ← Prevents secrets from being uploaded
@@ -148,23 +137,19 @@ rxplain/
     └── secrets.toml            ← API key (local only, never on GitHub)
 ```
 
----
 
 ## How the API Key is Kept Secret
 
-A common mistake is hardcoding the API key directly in `app.py`. If pushed to GitHub, anyone can steal it.
+MedCipher uses **Streamlit's built-in secrets system** instead:
 
-RxPlain uses **Streamlit's built-in secrets system** instead:
-
-| Environment | Where key is stored |
+| Environment | Where the key is stored |
 |-------------|-------------------|
-| Local (your PC) | `.streamlit/secrets.toml` |
+| Local | `.streamlit/secrets.toml` |
 | Streamlit Cloud | Secrets panel in app dashboard |
 | In the code | `st.secrets["GROQ_API_KEY"]` |
 
 Users who visit the deployed app **never see or enter** the API key — it is loaded invisibly on the server side.
 
----
 
 ## Sample Output
 
@@ -182,13 +167,11 @@ Users who visit the deployed app **never see or enter** the API key — it is lo
 | 5 | AKI | Acute Kidney Injury — sudden decrease in kidney function | ⚠ Watch |
 | 6 | BMP | Basic Metabolic Panel — group of blood tests checking organ function | ✔ Normal |
 
----
 
 ## Disclaimer
 
-RxPlain is for **educational purposes only**. It does not provide medical advice. Always consult a qualified healthcare professional for medical decisions.
+MedCipher is for **educational purposes only**. It does not provide medical advice. Always consult a qualified healthcare professional for medical decisions.
 
----
 
 ## References
 
