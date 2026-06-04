@@ -14,9 +14,45 @@ It is powered by **LLaMA 3.3 70B** (via the **Groq API**), built with **Streamli
 | Input | Output per Term |
 |-------|----------------|
 | Any raw medical text | Plain-language definition |
-| Lab results, radiology reports, discharge notes | Clinical relevance in context |
-| Abbreviations: CBC, MRI, DVT, BID, AKI, etc. | Suggested question to ask the doctor |
-| Drug names, diagnostic phrases | Severity flag: Normal ✔ or Watch ⚠ |
+| PDF files (text extraction) | Clinical relevance in context |
+| Lab results, radiology reports, discharge notes | Suggested question to ask the doctor |
+| Abbreviations: CBC, MRI, DVT, BID, AKI, etc. | Severity flag: Normal ✔ or Watch ⚠ |
+| Follow-up questions via chat | Conversational answers with full report context |
+
+
+## Key Features
+
+### 📄 **Multiple Input Methods**
+- **Paste text** directly into the interface
+- **Upload PDF files** — text is automatically extracted using `pypdf`
+- **Sample inputs** — one-click examples for testing
+
+### 📋 **Export & Sharing**
+- **Copy to clipboard** — copy the full explanation report as plain text
+- **Download JSON** — save structured data for personal records
+- **Plain text format** — easy to share with family or save in notes
+
+### 💬 **Smart Summary**
+After analysis, a plain-English summary sentence appears at the top, e.g.:
+> *"Your report mentions 3 concerning findings related to kidney function and infection. Here is what each term means."*
+
+This gives immediate context before showing detailed term cards.
+
+### 🗣️ **Chat Follow-up Questions**
+After the report is explained, users can type natural follow-up questions like:
+- *"What does high creatinine mean for my diet?"*
+- *"Should I be worried about these results?"*
+- *"What questions should I ask my doctor?"*
+
+The agent remembers the full report and previous conversation, providing contextual, compassionate answers.
+
+### 🏷️ **Structured Term Cards**
+Each medical term is displayed with:
+- Plain-language definition
+- Clinical relevance to the specific report
+- A suggested question to ask the doctor
+- Severity flag (Normal ✔ or Watch ⚠)
+- Filter options (All / Watch only / Normal only)
 
 
 ## System Architecture
@@ -55,13 +91,15 @@ User sees structured explanation report
 | Technology | Purpose |
 |------------|---------|
 | Python 3.x | Core programming language |
-| Groq API (LLaMA 3.3 70B) | LLM backend — free, fast, no credit card needed |
+| Groq API (LLaMA 3.3 70B) | LLM backend |
 | `groq` Python SDK | API communication |
 | Streamlit | Web interface framework |
-| `st.secrets` | Secure API key storage — never exposed to users |
+| `pypdf` | PDF text extraction |
+| `st.secrets` | Secure API key storage (never exposed to users) |
+| `st.chat_input` | Chat interface for follow-up questions |
+| `st.chat_message` | Chat bubble UI component |
 | Streamlit Cloud | Free public deployment (no server required) |
 | JSON / re | Response parsing and cleaning |
-
 
 ## Local Setup Instructions
 
@@ -73,7 +111,7 @@ cd MedCipher
 
 ### Step 2 — Install dependencies
 ```bash
-pip install streamlit groq
+pip install streamlit groq pypdf
 ```
 
 ### Step 3 — Get a free Groq API key
